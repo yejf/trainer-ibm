@@ -18,6 +18,27 @@
     <c:forEach var="name" items="${NAMES_KEY}" varStatus="vs">
         <p>${vs.count} -> ${name}</p>
     </c:forEach>
+    <hr/>
+    <table style="width; 70%">
+        <tr>
+            <th>序号</th>
+            <th>员工名</th>
+            <th>入职时间</th>
+            <th>工资</th>
+            <th>职称</th>
+        </tr>
+        <c:if test="${not empty EMPS_LIST_KEY}">
+            <c:forEach var="e" items="${EMPS_LIST_KEY}" varStatus="vs">
+                <tr>
+                    <td>${vs.count}</td>
+                    <td>${e.name}</td>
+                    <td>${e.start_date}</td>
+                    <td>${e.salary}</td>
+                    <td>${e.title}</td>
+                </tr>
+            </c:forEach>
+        </c:if>
+    </table>
 </div>
 </body>
 </html>
