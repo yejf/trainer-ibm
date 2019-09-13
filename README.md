@@ -8,8 +8,8 @@ IBM培训课程课堂案例
 | 1    | Spring Core & Spring MVC        | 2019/9/2  |
 | 2    | Spring Core & Spring MVC        | 2019/9/4  |
 | 3    | Spring Core & Spring MVC        | 2019/9/6  |
-| 4    | Spring Core & Spring MVC        | 2019/9/9  |
-| 5    | RESTful API with Spring MVC     | 2019/9/11 |
+| 4    | Spring Core & Spring MVC        | 2019/9/11  |
+| 5    | RESTful API with Spring MVC     | 2019/9/13 |
 | 6    | RESTful API with Spring MVC     |           |
 | 7    | Spring Security & Caching       |           |
 | 8    | Spring Security & Caching       |           |
