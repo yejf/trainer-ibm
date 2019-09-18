@@ -410,7 +410,7 @@ private Object getErrorMap(BindingResult bindingResult) {
 2. 在方法上面，使用 @RequestMapping 时，要指定 method 以及 produces
 3. 由于在Rest风格上，可以通过 路径参数来传递请求参数，所以需要用到 @PathVariable 注解以及 @RequestBody 注解
 
-## Rest风格与普通的URL对比
+## Rest风格与普通的URI对比
 
 1. 获取id为1的Employee实例或获取所有的Employee实例
 
