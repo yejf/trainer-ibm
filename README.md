@@ -10,23 +10,23 @@ IBM培训课程课堂案例
 | 3    | Spring Core & Spring MVC        | 2019/9/6  |
 | 4    | Spring Core & Spring MVC        | 2019/9/11  |
 | 5    | RESTful API with Spring MVC     | 2019/9/13 |
-| 6    | RESTful API with Spring MVC     |           |
-| 7    | Spring Security & Caching       |           |
-| 8    | Spring Security & Caching       |           |
-| 9    | Microservices with Spring Cloud |           |
-| 10   | Microservices with Spring Cloud |           |
-| 11   | Microservices with Spring Cloud |           |
-| 12   | MYSQL                           |           |
-| 13   | MYSQL                           |           |
-| 14   | MYSQL                           |           |
-| 15   | MongoDB                         |           |
-| 16   | MongoDB                         |           |
-| 17   | JPA and Hibernate               |           |
-| 18   | JPA and Hibernate               |           |
-| 19   | JPA and Hibernate               |           |
-| 20   | Spring Boot                     |           |
-| 21   | Spring Boot                     |           |
-| 22   | Spring Boot                     |           |
+| 6    | RESTful API with Spring MVC     | 2019/9/16 |
+| 7 | Spring Boot - Basic | 2019/9/18 |
+| 8 | Spring Boot - Persistence |  |
+| 9 | Spring Boot - Case |  |
+| 10 | JPA and Hibernate |  |
+| 11 | JPA and Hibernate |  |
+| 12 | JPA and Hibernate |  |
+| 13 | Spring Security & Caching       |           |
+| 14 | Spring Security & Caching       |           |
+| 15  | Microservices with Spring Cloud |           |
+| 16  | Microservices with Spring Cloud |           |
+| 17  | Microservices with Spring Cloud |           |
+| 18  | MYSQL                           |           |
+| 19  | MYSQL                           |           |
+| 20 | MYSQL                           |           |
+| 21 | MongoDB                         |           |
+| 22 | MongoDB                         |           |
 | 23   | Apigee                          |           |
 | 24   | Apigee                          |           |
 | 25   | RabbitMQ                        |           |
@@ -35,7 +35,7 @@ IBM培训课程课堂案例
 | 28   | Maven                           |           |
 | 29   | Spring Test                     |           |
 | 30   | Git & GitHub                    |           |
-| 31   | Maven                           |           |
+| 31   | Git & GitHub              |           |
 | 32   | Agile using Scrum               |           |
 | 33   | Docker                          |           |
 | 34   | Docker                          |           |
