@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>list customer</title>
+</head>
+<body>
+<h2>List Customer</h2>
+<hr/>
+<table style="width:80%">
+    <tr>
+        <th>序号</th>
+        <th>客户名</th>
+        <th>手机号码</th>
+        <th>客户级别</th>
+        <th>年龄</th>
+        <th>性别</th>
+    </tr>
+    <tr th:each="customer:${CUSTOMER_LIST}">
+        <td th:text="${customer.id}">1</td>
+        <td th:text="${customer.name}">张三</td>
+        <td th:text="${customer.phone}">13888887777</td>
+        <td th:text="${customer.level}">HIGH</td>
+        <td th:text="${customer.age}">56岁</td>
+        <td th:text="${customer.gender}">男</td>
+    </tr>
+</table>
+</body>
+</html>
