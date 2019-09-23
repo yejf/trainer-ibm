@@ -1,0 +1,34 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /
+
+spring:
+  # 多数据源配置
+  # 主数据库连接属性
+  datasource:
+    master:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/master?characterEncoding=UTF8&serverTimezone=UTC
+      username: root
+      password: root
+    slave:
+      driver-class-name: com.mysql.jdbc.Driver
+      jdbc-url: jdbc:mysql://localhost:3306/slave?characterEncoding=UTF8&serverTimezone=UTC
+      username: root
+      password: root
+
+  mvc:
+    static-path-pattern: /static/**
+
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML
+    prefix: classpath:/templates/thymeleaf/
+    suffix: .html
+    servlet:
+      content-type: text/html
+
+mybatis:
+  type-aliases-package: com.kclmedu.springboot.entity
