@@ -21,11 +21,11 @@ public class CustomerServiceTests {
     @Test
     public void testSave() {
         Customer c = new Customer();
-        c.setName("张无记[主]");
-        c.setPhone("19800997765");
-        c.setAge(23);
+        c.setName("张三丰[主]");
+        c.setPhone("19800997788");
+        c.setAge(100);
         c.setGender(Gender.男);
-        c.setLevel(CustomerLevel.HIGH);
+        c.setLevel(CustomerLevel.LOW);
         //
         customerService.save(c);
     }
