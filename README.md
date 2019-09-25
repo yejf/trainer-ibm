@@ -13,8 +13,8 @@ IBM培训课程课堂案例
 | 6    | RESTful API with Spring MVC     | 2019/9/16 |
 | 7 | Spring Boot - Basic | 2019/9/18 |
 | 8 | Spring Boot - Persistence | 2019/9/20 |
-| 9 | Spring Boot - Case |  |
-| 10 | JPA and Hibernate |  |
+| 9 | Spring Boot - Case | 2019/9/23 |
+| 10 | JPA and Hibernate | 2019/9/25 |
 | 11 | JPA and Hibernate |  |
 | 12 | JPA and Hibernate |  |
 | 13 | Spring Security & Caching       |           |

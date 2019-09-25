@@ -11,7 +11,7 @@
     <groupId>com.kclmedu</groupId>
     <artifactId>hello-springboot-03</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>hello-springboot-03</name>
     <description>Demo project for Spring Boot</description>
 

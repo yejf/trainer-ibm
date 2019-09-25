@@ -193,3 +193,141 @@ spring:
         username: xxxx
 ```
 
+
+
+## 如何使用Spring Boot 把项目发布成传统的war部署格式
+
+> 在默认情况下，spring boot项目打包的格式是 jar, 它是基于 main 方法来执行的，如下：
+>
+> ```java
+> package com.kclmedu.springboot;
+> 
+> import org.mybatis.spring.annotation.MapperScan;
+> import org.springframework.boot.SpringApplication;
+> import org.springframework.boot.autoconfigure.SpringBootApplication;
+> import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+> 
+> @SpringBootApplication
+> public class HelloSpringboot03Application {
+> 
+>     public static void main(String[] args) {
+>         SpringApplication.run(HelloSpringboot03Application.class, args);
+>         System.out.println("--- SpringBootApplication run success....");
+>     }
+> }
+> ```
+>
+> 打包成 jar 格式后，我们可以使用：
+>
+> ```cmd
+> java -jar xxxx.jar    //就可以执行这个 spring boot 项目
+> ```
+
+要把 spring boot 打包成 war 格式，这个很简单，只需要在 pom.xml 中把 <packaging>这个标签的值设为 war 即可。如下：
+
+```xml
+<packaging>war</packaging>
+```
+
+但是，光改变这个，只是输出的格式变化了，当我们把此 war 文件放入到 WEB服务器中，如何去引导执行这个war包就成了一问题。
+
+实际上，我们的WEB 服务器加载 部署的应用时，有两种方式
+
+1. 基于传统的 web.xml 方式进行加载
+
+2. 纯代码的方式来加载应用， 本质上是利用 **WebApplicationInitializer** , 如下：
+
+   ```java
+   package com.kclmedu.springboot;
+   
+   import org.springframework.boot.builder.SpringApplicationBuilder;
+   import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+   
+   public class HelloApplicationInitializer extends SpringBootServletInitializer {
+   
+       @Override
+       protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+           //
+           System.out.println("--- 基于web 方式启动SpringBoot应用....");
+           //
+           return builder.sources(HelloSpringboot03Application.class);
+       }
+   }
+   ```
+
+   
+
+
+
+## Spring、Spring MVC 、Spring Boot小结
+
+> Spring Framework 是包含 Spring MVC的，Spring 框架是一个大家族，里面包含很多子框架，如：
+>
+> ​	IOC
+>
+> ​	AOP
+>
+> ​	DT[tx]
+>
+> ​	SPRING MVC [是MVC思想的一种实现]
+>
+> ​	...
+>
+> Spring Boot 是与Spring Framework “平级”的一个项目，它是项目开发、部署、组织的一种新型方式，有可以有效地减化我们开发项目时的配置
+
+### Spring Boot + Spring MVC 时为我们减化了哪些操作？
+
+首先，来看一下 Spring mvc 的项目配置清单
+
+1. web.xml  [或者是纯代码]
+2. web环境的配置类，一般命名为： **WebMvcConfig.java** , 在此类中，会进行如下配置
+   * 静态资源的访问配置  【一般要有】
+   * 注册拦截器   【可选】
+   * 视图解析器的配置 【可选】
+     *  JSP
+     *  Thymeleaf
+     *  Beetl
+     *  Velocity
+     * ...
+   * 文件上传的配置 【可选】
+   * 表单数据的后端验证 【可选】
+   * 国际化 【可选】
+   * 注册全局异常处理器 【可选】
+   * ...
+3.  持久层和业务层的配置类，一般命名为： **AppConfig.java** , 此类中，会进行如下配置
+   * 数据源的配置  【必选】
+   * 根据不同的持久层实现技术，来配置不同的东西  【必选】
+     *  如果是JDBC技术，则 配置 JdbcTemplate 模板类
+     * 如果是 mybatis框架， 则配置 SqlSessionFactoryBean 
+     *  如果是 Hibernate 框架， 则配置 SessionFactoryBean 
+     * ....
+   * 配置事务管理器  【如果开启DT的话，则必配】
+4.  pom.xml 的配置   【有时会出现版本冲突】
+
+**如果引入了 Spring Boot，则配置清单如下：**
+
+1.  web.xml 没了
+
+2. WebMvcConfig.java 配置类不需要
+
+3. AppConfig.java 不需要
+
+4. pom.xml  更加精减了，而且不会再有 版本冲突的问题
+
+**那么，增加了哪些？**
+
+1. 所有的配置信息，都可以定义在 **application.properties 或 application.yml** 文件中
+2. springboot会根据导入的依赖【也就是classpath下的jar包】自动为我们进行配置【也就是自动化配置】
+
+
+
+
+
+   
+
+
+
+
+
+
+
