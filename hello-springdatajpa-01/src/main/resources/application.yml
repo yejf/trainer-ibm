@@ -1,0 +1,22 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /
+
+# jpa config
+spring:
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/master?characterEncoding=UTF8&serverTimezone=UTC
+    username: root
+    password: 123456
