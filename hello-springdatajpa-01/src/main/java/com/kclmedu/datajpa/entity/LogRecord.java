@@ -26,4 +26,13 @@ public class LogRecord {
     @Column
     private String user;
 
+    public LogRecord() {
+    }
+
+    public LogRecord(String title, String content, Date recordTime, String user) {
+        this.title = title;
+        this.content = content;
+        this.recordTime = recordTime;
+        this.user = user;
+    }
 }
