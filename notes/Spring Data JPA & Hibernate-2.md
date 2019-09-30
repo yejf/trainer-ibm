@@ -211,7 +211,7 @@ SPRING DATA JPA SQL转换引擎在translate我们的方法名时，会根据关�
 处理式方式一：
 
 > 1. 我们可以自定义一个接口，直接从 Repository<T, ID> 接口处继承， 并打上 @NoRepositoryBean 注解。然后在此方法定义你想要暴露的方法出来。
-> 2. 我们开发的Repository接口从我们自定义的  @NoRepositoryBean 接口中派生出来，这样就可以达到目的。
+> 2. 我们开发的Repository接口从我们自定义的  **@NoRepositoryBean** 接口中派生出来，这样就可以达到目的。
 
 
 

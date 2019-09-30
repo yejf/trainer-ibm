@@ -7,6 +7,7 @@ server:
 spring:
   jpa:
     generate-ddl: true
+    open-in-view: true
     hibernate:
       ddl-auto: update
     show-sql: true
@@ -14,6 +15,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+        enable_lazy_load_no_trans: true
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
