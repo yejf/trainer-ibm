@@ -13,8 +13,8 @@ public class RoleRepositoryTests extends BaseTests {
     @Test
     public void testSave() {
         Role role = new Role();
-        role.setName("管理员");
-        role.setDescription("拥有一切权限");
+        role.setName("老师");
+        role.setDescription("拥有授课相关的权限");
         //
         roleRepository.save(role);
     }

@@ -1,6 +1,7 @@
 package com.kclmedu.datajpa.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,6 +22,8 @@ public class LogRecord {
     private String content;
 
     @Column(name = "record_time")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Temporal(value = TemporalType.TIMESTAMP)
     private Date recordTime;
 
     @Column

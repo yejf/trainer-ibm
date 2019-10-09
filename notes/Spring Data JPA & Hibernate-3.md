@@ -123,37 +123,83 @@ spring:
 2. 使用 @Query 注解来自定义查询
 
    ```java
-   @Query("select u from User u where u.name = ?1")
+   @Query("from User u where u.name = ?1")
    User getByName(String name);
    ```
 
 3. 使用命名参数，注解@Param
 
    ```java
-   @Query("select u from User u where u.name = :username or u.status = :status")
+   @Query("from User u where u.name = :username or u.status = :status")
    User getByUsernameOrStatus(@Param("username") String username, @Param("status") int status);
    ```
 
-4. 使用 SpEL Expression 语法
+4. 关联查询
+
+   1. 隐式关联，适合于关联的另一边是一的情况，如下：
+
+      ```java
+      @Query("from Address a where a.user.name = :uname")
+      List<Address> findByUserName(@Param("uname") String userName);
+      ```
+
+      
+
+   2. 显示关联，适合于关联的另一边是多的情况
+
+      ```java
+      @Query("select u from User u join u.addressList a where a.province = :province")
+      List<User> findByProvince(@Param("province") String province);
+      ```
+
+      
+
+5. 使用 SpEL Expression 语法
+
+   > 注： 需要在 @Entity注解上通过 name来指定实体的名字，然后才可以用如下的语法去引用
 
    ```java
    @Query("select u from #{#entityName} u where u.name = ?1")
    User getByName(String name);
    ```
 
-5. 使用原生查询 nativeQuery
+6. 投影查询 [projection]
 
-   > 写原生态的sql 语句
+   > 利用 select 关键字来查询你想要的列.
 
-6. 分页查询及排序
+   语法：
+
+   select 类别名.属性名, 类别名.属性名, ... FROM 类名 类别名 WHERE 条件...
+
+   如果要把这些列“封装”成一个对象，我们可以开发这类对象【叫 值对象，Value Object, VO]
+
+   上面的语法就可以改成：
+
+   select new xx.xx.xxVO(类别名.属性名, 类别名.属性名, ...)  FROM 类名 类别名 WHERE 条件...
+
+7. 使用原生查询 nativeQuery
+
+   > 写原生态的sql 语句， 在@Query 注解中，使用 nativeQuery=true 属性
+
+8. 分页查询及排序
+
+   > 方法的设计上，参数加上 Pageable ， 返回值以 Page<T> 做为类型
 
    
 
-7. 自定义修改和删除 操作  @Modifying 注解的应用
+9. 自定义修改和删除 操作  @Modifying 注解的应用
 
-   
+   > 在@Query注解上面再加上一个注解： @Modifying 
+   >
+   > 就可以支持如下语法：
+   >
+   > 1. UPDATE 实体名 别名 Set 别名.属性名 = :参数 ....
+   >
+   > 2. DELETE FROM  实体名 别名 WHERE  别名.属性名 = :参数 ....
+   >
+   >    
 
-8. 多表查询
+10. 多表查询
 
-   
+    > 本质上是关联
 

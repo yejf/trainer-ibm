@@ -5,10 +5,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Setter
 @Getter
@@ -32,16 +29,29 @@ public class User {
     private int status;  //0代表锁定， 非0代表正常
 
     //添加关系
-    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user",fetch = FetchType.LAZY) //关联的另一边是多的话，默认是延迟加载
     private List<Address> addressList;    //一对多
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Role.class, cascade = CascadeType.ALL)
     @JoinTable(name = "TBL_USER_ROLE",joinColumns =
             @JoinColumn(name = "user_id",referencedColumnName = "id"),
         inverseJoinColumns =
             @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     private Set<Role> roleSet;    //多对多
+
+    /****
+     * 内存中添加角色，也就是也角色对象建立内存关联关系
+     * @param role
+     */
+    public void addRole(Role role) {
+        //
+        if(this.roleSet == null) {
+            this.roleSet = new HashSet<>();
+        }
+        //
+        roleSet.add(role);
+    }
 
     //手动去写 hashcode equals 以及 toString 方法
 

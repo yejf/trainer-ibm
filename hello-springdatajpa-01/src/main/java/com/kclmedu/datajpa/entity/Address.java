@@ -32,7 +32,7 @@ public class Address {
     private String phone;
 
     //关联关系
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) //关联的另一边是一的话，默认就会做迫切加载
     @JoinColumn(name = "user_id",nullable = false)
     private User user;  //多对一
 

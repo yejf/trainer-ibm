@@ -18,4 +18,5 @@ public interface BaseRepository<T, ID> extends Repository<T, ID> {
 
     void delete(T var1);
 
+    void flush();
 }

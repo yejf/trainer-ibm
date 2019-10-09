@@ -6,6 +6,7 @@ import com.kclmedu.datajpa.entity.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
 import java.util.Optional;
 
 public class AddressRepositoryTests extends BaseTests {
@@ -30,5 +31,33 @@ public class AddressRepositoryTests extends BaseTests {
 
         //
         addressRepository.save(a);
+    }
+
+    @Test
+    public void testFindById() {
+        Optional<Address> address = addressRepository.findById("4028b8816d825184016d8251a1200000");
+        System.out.println(address.get());
+        System.out.println(address.get().getUser());
+    }
+
+    @Test
+    public void testDeleteById() {
+        addressRepository.deleteById("4028b8816d82533b016d825357e50000");
+    }
+
+    @Test
+    public void testDelete() {
+        Address a = new Address();
+        a.setId("4028b8816d825184016d8251a1200000");
+        addressRepository.delete(a);
+    }
+
+    @Test
+    public void testFindByUserName() {
+        List<Address> addressList = addressRepository.findByUserName("jack");
+        //
+        if(addressList != null) {
+            addressList.forEach(System.out::println);
+        }
     }
 }

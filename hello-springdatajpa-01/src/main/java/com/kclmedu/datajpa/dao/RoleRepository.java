@@ -6,4 +6,6 @@ import com.kclmedu.datajpa.entity.Role;
 public interface RoleRepository extends BaseRepository<Role, String> {
 
     //nothing!
+
+
 }
