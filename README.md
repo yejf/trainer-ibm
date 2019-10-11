@@ -20,7 +20,7 @@ IBM培训课程课堂案例
 | 11 | JPA and Hibernate | 2019/9/27 |
 | 12 | JPA and Hibernate | 2019/9/30 |
 | 13 | JPA and Hibernate  [补] | 2019/10/9 |
-| 14 | MYSQL |  |
+| 14 | MYSQL | 2019/10/11 |
 | 15 | MYSQL |  |
 | 16 | MYSQL |  |
 | 17 | MongoDB |  |
