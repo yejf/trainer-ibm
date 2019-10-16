@@ -545,8 +545,304 @@ flush privileges;
 > [HAVING 子句]
 >
 > [ORDER BY 子句]
+
+
+
+### Where子句
+
+> 可以使用的运算符有：
+>
+> * 比较运算符, 有：>, <,  >=,  <=, =,   !=,  <>
+> * 算术运算 【列值是可以进行运算的】
+> * IN (list)   和   NOT IN (list)
+> * LIKE 主要是用来比较字符串，支持通配符，主要有2个通配符
+>   * _  通配任意单个字符
+>   * %  通配任意多个字符
+> * BETWEEN AND  和  NOT BETWEEN AND 
+> * IS NULL   和   IS NOT NULL
+> * EXISTS  和  NOT EXISTS   主要是用在子查询中的，判断子查询是否有结果。
+> * AND
+> * OR
+> * ...
+
+### 关联查询
+
+> 主要是内联[INNER JOIN]和外联 [OUTER JOIN], 外联又分为 左外联和右外联。
+>
+> 注：
+>
+> 当查询的列分散在不同的表中或要查询的列和条件分散在不同的表中时，都需要使用关联查询。
+
+1. **内联操作**
+
+   ```sql
+   -- 查询部门名及此部门下的所有员工名和工资、入职时间
+   select d.name "部门名", e.first_name "员工名",e.start_date "入职时间",e.salary "月薪"
+   from s_dept d JOIN s_emp e ON d.id = e.dept_id
+   
+   -- 查询出员工名、工资及上司的名字和工资
+   select e.first_name "员工名", e.salary, m.first_name "经理名",m.salary 
+   from s_emp e JOIN s_emp m ON e.manager_id = m.id
+   ```
+
+   注： 上面的查询中，如果某个员工的上司ID是NULL值 的话，则这个员工记录将不会被查询出来。
+
+   
+
+2. 外联操作
+
+   ```sql
+   -- 查询出员工名、工资及上司的名字和工资【注：没有上司的员工也要被查询出来】
+   select e.first_name "员工名", e.salary, m.first_name "经理名",m.salary 
+   from s_emp e LEFT JOIN s_emp m ON e.manager_id = m.id
+   ```
+
+   **这里使用了左外联，以关联左表为准，即使右边没有与之对应的记录，左边的记录也要被查询出来，右边全部以NULL值显示。**
+
+   如果是右外联，会怎么样？
+
+   ```sql
+   select e.first_name "员工名", e.salary, m.first_name "经理名",m.salary 
+   from s_emp e RIGHT JOIN s_emp m ON e.manager_id = m.id
+   ```
+
+3. 思考？
+
+   > 查询出不是经理的员工？
+   >
+   > 
+
+### 分组查询和组函数
+
+> 什么是分组？
+>
+> ​	就是看待数据的角度。
+>
+> 什么是组函数？
+>
+> ​	就是对分组之后的同一组记录进行计算的函数，它都是多进单出。
+>
+> 注：
+>
+> 如果使用了组函数，但是没有显示地分组，则表示所有查询出来的记录归为一组。
+>
+> ```sql
+> -- 统计记录数
+> select count(*) from 表名;
+> -- 按性别分组统计出各有多少学员
+> select gender, count(*) from tbl_class group by gender;
+> 
+> -- 统计出各部门的员工数
+> select dept_id, count(*) from s_emp group by dept_id;
+> 
+> -- 统计出同一部门、同一职称的人数
+> select dept_id,title count(*) from s_emp group by dept_id,title;
+> ```
+>
+> 注：
+>
+> 只有出现在group by 后面的列才能做为select 后面查询的列，除非使用了组函数修饰。
+
+**常用的组函数**
+
+1. count([DISTINCT] * | column_name)   用来统计行数
+2. sum([DISTINCT] column_name)   用来求和的
+3. MIN(column_name)  求最小值
+4. MAX(column_name)  求最大值
+5. AVG(column_name)   求平均值
+
+```sql
+-- 查询出员工的最高、最低、平均、工资总和
+select MAX(salary), min(salary), avg(salary), sum(salary) 
+from s_emp;
+
+-- 查询出各部门的员工的最高、最低、平均、工资总和
+select dept_id "部门号",MAX(salary), min(salary), avg(salary), sum(salary) 
+from s_emp group by dept_id;
+```
+
+
+
+### 常用函数
+
+> SQL是第四代语言，只关心你做什么？不需要关心怎么做！ 它是无需编写逻辑代码集合的。所以，要达到一些功能，平台提供了很多函数供我们使用，主要分成以下三类：
+>
+> 1. 字符函数
+> 2. 数值函数
+> 3. 日期函数
+
+#### 字符函数
+
+* format(var, pattern)      格式化日期或数字
+
+* replace(str, old, new)    替换
+* reverse(str)   反转
+* locate(sub, str)    求 sub 在 str 中的最开始位置
+* position(sub, str)   同上
+* repeat(str, n)   重复
+* substr(str, start, length)   求 str的子串，从start位置开始，截取length个长度
+* lpad
+* rpad
+* ltrim
+* rtrim
+* ....
+
+```sql
+select reverse('hello');
+....
+select format(3.1456405, 3);
+```
+
+#### 数字函数
+
+* pi()   
+* rand()    随机数
+* round()  四舍五入
+* truncate()   直接截取， 不做四舍五入
+* ...
+
+```sql
+select pi();  
+select rand();
+select round(3.4567, 1);    -- 3.5
+select truncate(3.4567, 1);   -- 3.4
+```
+
+
+
+#### 日期函数
+
+* current_date();   
+* curdate();
+* now()
+* current_time();
+* curtime();
+* adddate(d, n)    返回在d的基础上加上n天的日期
+* addtimie(t,  n)    返回在t的基础上加上 n秒的时间
+* datediff(d1, d2)    计算 两个日期相差多少天
+* date_format(d, f);  按达式 f的要求显示日期 d
+* EXTRACT(type FROM d)    从日期中提取指定的部份
+* year()
+* month()
+* day()
+* ...
+
+### CASE WHEN 语句
+
+> 经常用在来把“行”转换成“列”的查询中。它支持两种语法
+>
+> 一、 类似于switch
+>
+> CASE x
+>
+> WHEN 值1 THEN expr1
+>
+> WHEN 值2 THEN expr2
+>
+> ...
+>
+> WHEN 值n THEN exprN
+>
+> ELSE
+>
+> ​	else_expr
+>
+> END;
+>
+> 如：
+>
+> ```sql
+> -- 查询出员工及所在的部门中文名
+> select e.first_name,e.salary,
+>     CASE e.dept_id
+>         WHEN 10 THEN '财务部'
+>         WHEN 31 THEN '销售部'
+>         WHEN 41 THEN '业务部'
+>         WHEN 50 THEN '行政部'
+>         ELSE '未知部门'
+>     END "中文部门名"
+> from s_emp e;
+> ```
 >
 > 
+>
+> 二、 多分支 if
+>
+> 语法：
+>
+> CASE 
+>
+> WHEN 条件1 THEN expr1
+>
+> WHEN 条件2 THEN expr2
+>
+> ...
+>
+> WHEN 条件N THEN exprN
+>
+> ELSE
+>
+> ​	else_expr
+>
+> END;
+>
+> 如：
+>
+> ```sql
+> -- 把把员工工资分成高、中、低三档显示，其中，大于1400元的为高，在1100和1400之间的为中，低于1100的为低
+> select e.first_name,
+> 	CASE
+> 		WHEN e.salary > 1400 THEN '高薪'
+> 		WHEN e.salary BETWEEN 1100 AND 1400 THEN '中薪'
+> 		WHEN e.salary < 1100 THEN '低薪'
+> 	END "工资级别"
+> from s_emp e;
+> 
+> ```
+
+思考： 统计出高、中、低 三档薪水的员工数量。
+
+
+
+### 子查询 [subquery]
+
+> 就是查询，它可以出现在任意的位置， 主要有用在如下位置：
+>
+> * 子查询做为列
+>
+>   ```sql
+>   -- 查询出员工名及他的上司名
+>   select e.first_name "员工名", 
+>   	-- 上司名[使用子查询来写]
+>   	IFNULL((select m.first_name from s_emp m where e.manager_id = m.id),'董事会') "上司名"
+>   from s_emp e;
+>   ```
+>
+>   
+>
+> * 子查询做为条件
+>
+>   ```sql
+>   -- 查询出与'Ben'同一部门的员工
+>   select e.first_name,e.salary,e.title from s_emp e where e.dept_id = (
+>   	-- 查询出Ben所在的部门名
+>   	select dept_id from s_emp where first_name = 'Ben'
+>   )
+>   AND e.first_name <> 'Ben'
+>   ```
+>
+>   
+>
+> * 子查询做为“虚表【内联视图】"
+>
+>   ```sql
+>   -- 查询出工资排名前三的员工
+>   select e.first_name,e.salary from (select * from s_emp order by salary desc) e limit 3;
+>   ```
+>
+>   
+
+### 
 
 
 
