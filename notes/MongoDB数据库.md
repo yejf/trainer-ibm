@@ -283,14 +283,257 @@ db.emp.insert(doc)
 ### 练习：
 
 1. 查询出工资范围在 10000 至 15000之间的员工
+
+   ```sql
+   SQL:
+   select * from emp where salary > 10000 and salary < 15000;
+   -- MongoDB:
+   db.emp.find({salary: {$gt: 10000, $lt: 15000}},{_id:0,tag:0})
+   ```
+
+   
+
 2. 查询出职位含有 'java' 的员工
+
+   ```sql
+   SQL:
+   select * from emp where title like '%java%';
+   -- MongoDB:
+   db.emp.find({title: /java/i})
+   ```
+
+   注： 以 i 结尾表示 忽略大小写
+
+   
+
 3. 查询出名字中以'袁'开头或者工资大于15000或者年龄大于 28岁的员工
+
+   ```sql
+   db.emp.find(
+       	-- 条件 condition
+       	{
+               $or: 
+               	[
+                       {name: /^袁/},
+                       {salary: {$gt: 15000}},
+                       {age: {$gt: 28}}
+                   ]
+            },
+       	-- 投影 projection
+            {
+       		_id:0,
+       		tag:0
+      		 }
+   )
+   ```
+
+   
+
 4. 查询出总记录数
+
+   ```sql
+   SQL:
+   select count(*) "total" from emp;
+   -- MongoDB:
+   db.emp.aggregate([{$group: {_id: null, total: {$sum: 1}}}])
+   -- 或者
+   db.emp.find().count(true);
+   ```
+
+   以上的语句相当于执行了： select count(*) from emp; 
+
+   
+
 5. 查询出各职称的工资总和。
 
+   ```sql
+   SQL:
+   select title, sum(salary) "totalSalary" from emp group by title;
+   -- MongoDB:
+   db.emp.aggregate([{$group: {_id: '$title', totalSalary: {$sum: '$salary'}}}])
+   ```
 
 
--- 待讲
+
+### 基本查询汇总
+
+> 语法：
+>
+> db.collection_name.find(
+>
+> ​	{where},     -- 指定查询的条件
+>
+> ​	{projection}    -- 指定查询的列
+>
+> ).sort({属性名: 1|-1})
+>
+> 排重的语法：
+>
+> db.collection_name.distinct("属性名",{where})
+>
+> 
+
+#### 1.行记录过滤
+
+支持的条件指令
+
+* $gt, $lt, $gte, $lte, $ne
+* $in(list)
+* ...
+
+-- 年龄在22至28岁之间员工
+
+```sql
+db.emp.find({age: {$gte: 22, $lte: 28}},{_id: 0, tag: 0})
+```
+
+...
+
+#### 2.模糊匹配
+
+> 采用正则表达式的方式进行匹配。
+>
+> ...
+
+
+
+#### 3.排重
+
+> 排重的语法：
+>
+> db.collection_name.distinct("属性名",{where})
+
+```sql
+-- 查询出所有员工的入职时间 
+-- sql
+select distinct start_date from emp;
+-- MongoDB:
+db.emp.distinct("start_date")
+```
+
+
+
+#### 4.投影查询
+
+> 可以从两个角度来定义
+>
+> 1. 不想显示哪些域
+>
+>    > {属性名: 0} 或 {属性名: false}
+>
+> 2. 只想显示哪些域
+>
+>    > {属性名: 1} 或 {属性名:  true}
+
+如:
+
+```sql
+-- SQL
+select name,age from emp;
+-- MongoDB:
+db.emp.find({}, {name: 1, age: 1, _id: 0})
+或
+db.emp.find({}, {name: true, age: true, _id: false})
+```
+
+
+
+#### 5.多个逻辑条件
+
+> 当有多个条件时，要么是 $and, 要么是 $or, 它们的值都是 数组类型。
+>
+> 语法：
+>
+> db.collection_name.find(
+>
+> ​	{$or|$and: [
+>
+> ​		{条件1},
+>
+> ​		{条件2},
+>
+> ​		....
+>
+> ​		{条件N}
+>
+> ​	]},
+>
+> ​	{属性名: 0} 或 {属性名: false}
+>
+> )
+
+```sql
+-- 工资大于20000并且年龄大于30岁 或者 职位中以是Java开头的 员工
+-- SQL:
+select * from emp where (salary > 20000 AND age > 30) OR title like 'Java%';
+-- MongoDB:
+db.emp.find(
+	{
+    	$or: [
+            {title: /^Java/},
+            {
+            $and: [
+                	{salary: {$gt: 20000}},
+                	{age: {$gt: 30}}
+            	]
+            }
+        ]
+    },
+    {_id:0,name:1, salary:1, age:1, title:1}
+)
+```
+
+
+
+#### 6.排序
+
+> 在查询的方法后面，再调用 sort 方法即可，语法：
+>
+> sort({属性名: 1 | -1, 属性名: 1|-1, [...]})
+>
+> 1代表 升序， -1 代表降序。
+
+如：
+
+```sql
+-- 按年龄排序显示所有的员工名、职位、工资、年龄
+-- sql:
+select name,title,salary, age from emp order by age asc, salary desc;
+-- MongoDB:
+db.emp.find({},{name:1,salary:1,age:1,title:1,_id:0}).sort({age: 1, salary: -1})
+```
+
+
+
+#### 7.分页
+
+> limit(n) , 只查询出指定的条目数【行数】
+>
+> skip(n)， 跳过指定的条目数【行数】
+>
+> 所以，分页的查询是基于以上两个函数，其中， limit的参数代表 每页多少行[pageSize], skip的参数应该是 (当前页 - 1) * pageSize.
+
+如：
+
+```sql
+db.emp.find({},{name:1,salary:1, age:1, title:1, _id:0}).limit(5).skip(5)
+```
+
+
+
+#### 8.统计行数
+
+> 调用 count() 方法
+
+```sql
+-- 查询有多少员工的工资大于15000元
+-- sql:
+select count(*) from emp where salary > 15000;
+-- MongoDB:
+db.emp.find({salary: {$gt: 15000}},{_id:0}).count()
+```
+
+
 
 ### 聚合操作
 
@@ -306,17 +549,88 @@ db.emp.insert(doc)
 > -  $group：将集合中的文档分组，可用于统计结果。
 > -  $sort：将输入文档排序后输出。
 
+语法规则：
+
+```sql
+db.collection_name.aggregate([
+    -- 每一个都是一个管道
+    {$match: {salary: {$gt: 15000, $lt: 20000}}},
+    {$group: {_id: null, totalSalary: {$sum: '$salary'}}},
+    {$sort: {name: 1}},
+    ...,
+    {$unwind: '$tag'}
+])
+```
+
+其中，_id 后面指定分组的列，可以有多列
+
+$group 之前的 $match 表示 where 子句
+
+$group 之后的 $match 表示 having 子句
+
+$sort 表示排序
+
+$unwind 表示将文档中的某一个数组类型字段拆分成多条，每条包含数组中的一个值
+
+如：
+
+```sql
+-- 查询出员工总记录数
+-- sql:
+select count(*) "total" from emp;
+-- MongoDB 1:
+db.emp.find().count()
+-- MongoDB 2:
+db.emp.aggregate(
+    [
+        {
+        	$group: {
+        			_id: null, 
+        			total: {$sum: 1}
+        	}
+        }
+    ]
+)
+```
+
+注：
+
+> aggregate 函数的执行过程也叫上管道操作，前面的执行结果做为后面的执行输入。
+
+
+
 #### 管道操作的图示
 
 ![mongdb-管道](D:\学习工作区\1.codeArea\3.JavaEE_Workspace\0.SpringEcoSystem\trainer-ibm\notes\images\mongdb-管道.png)
+
+```sql
+-- MongoDB:
+db.orders.aggregate([
+    {$match: {status: 'Normal'}},
+    {$group: {_id: '$cust_id', totalAmount: {$sum: '$amount'}}},
+    {$match: {totalAmount: {$gt: 500}}},
+    {$sort: {totalAmount: -1}}
+])
+```
 
 
 
 ## 索引操作
 
+> 作用：
+>
+> 1. 提高文档的检索效率
+> 2. 索引是存储在内存之中的，索引的效率非常高。
+
+
+
 ### 创建索引
 
 > db.collection_name.createIndex({field: 1 | 0,  fileld: 1|0, ... }, options)
+>
+> 或
+>
+> db.getCollection("collection_name").createIndex({field: 1 | 0,  fileld: 1|0, ... }, options)
 >
 > 其中，1代表 升序索引， 0 代表降序索引
 
@@ -339,3 +653,12 @@ db.emp.insert(doc)
 > 或
 >
 > db.collection_name.dropIndex(index_name)
+
+
+
+### MongoDB 客户端
+
+> 可以使用 ROBO Studio 3T, 下载地址： https://studio3t.com/
+>
+> 
+
